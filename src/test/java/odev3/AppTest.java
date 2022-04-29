@@ -10,10 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 class AppTest {
-    @Test void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
-    }
     @Test public void testFound() {
         ArrayList<Integer> array = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
         assertTrue(App.searchInteger(array, 4));
