@@ -45,3 +45,6 @@ application {
     // Define the main class for the application.
     mainClassName = 'odev3.App'
 }
+
+task stage(dependsOn: ['shadowJar'])
+shadowJar.mustRunAfter clean
