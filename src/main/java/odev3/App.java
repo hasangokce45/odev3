@@ -17,7 +17,13 @@ public class App {
     public static void main(String[] args) {
         port(getHerokuAssignedPort());
 
-        get("/", (req, res) -> "Hello, World");
+
+    get("/", (req, res) -> {
+        Map<String, Object> model = new HashMap<>();
+        return new MustacheTemplateEngine().render(
+            new ModelAndView(model, "index.mustache")
+        );
+    });
 
         post("/int", (req, res) -> {
             String input1 = req.queryParams("input1");
@@ -82,16 +88,29 @@ public class App {
             sc1.close();
             System.out.println(inputList);
             Character input2 = req.queryParams("input2").charAt(0);
-            App.deleteChar(inputList, input2);
-            Map<String, Character> map = new HashMap<String, Character>();
-            map.put("status", input2);
-            return new ModelAndView(map, "char.mustache");
+            try{
+                App.deleteChar(inputList, input2);
+                System.out.println(inputList);
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("char", input2);
+                map.put("result", "Character deletion successful!");
+                map.put("chars", inputList);
+                return new ModelAndView(map, "char.mustache");
+            } catch (Exception e) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("char", input2);
+                map.put("result", "Character to be deleted was not found in the Character ArrayList!");
+                map.put("chars", inputList);
+                return new ModelAndView(map, "char.mustache");
+            }
         }, new MustacheTemplateEngine());
 
         get("/char",
         (rq, rs) -> { 
             Map<String, String> map = new HashMap<String, String>();
-            map.put("status", "not selected yet!");
+            map.put("char", "not selected yet!");
+            map.put("result", "Deletion not done yet!");
+            map.put("chars", "not defined yet!");
             return new ModelAndView(map, "char.mustache");
         }, new MustacheTemplateEngine());
 
@@ -122,7 +141,6 @@ static int getHerokuAssignedPort() {
     }
 
     public static boolean deleteChar(ArrayList<Character> array, char e) { 
-        System.out.println("inside search"); 
         if (array == null) return false; 
         if(array.remove(Character.valueOf(e))) return true;
         return false; 
