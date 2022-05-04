@@ -88,15 +88,15 @@ public class App {
             sc1.close();
             System.out.println(inputList);
             Character input2 = req.queryParams("input2").charAt(0);
-            try{
-                App.deleteChar(inputList, input2);
+            if (App.deleteChar(inputList, input2) == true){
                 System.out.println(inputList);
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("char", input2);
                 map.put("result", "Character deletion successful!");
                 map.put("chars", inputList);
                 return new ModelAndView(map, "char.mustache");
-            } catch (Exception e) {
+            }
+            else {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("char", input2);
                 map.put("result", "Character to be deleted was not found in the Character ArrayList!");
